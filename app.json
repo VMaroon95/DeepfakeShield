@@ -1,39 +1,26 @@
 {
   "expo": {
     "name": "DeepfakeShield",
-    "slug": "deepfakeshield",
+    "slug": "deepfake-shield",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#1C1B1F"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.varunmeda.deepfakeshield",
+      "bundleIdentifier": "com.vmaroon95.deepfakeshield",
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "DeepfakeShield needs access to analyze images and videos for deepfake detection.",
-        "CFBundleDocumentTypes": [
-          {
-            "CFBundleTypeName": "Media",
-            "LSHandlerRank": "Alternate",
-            "LSItemContentTypes": [
-              "public.image",
-              "public.movie"
-            ]
-          }
-        ]
+        "NSPhotoLibraryUsageDescription": "DeepfakeShield needs access to analyze images and videos for deepfake detection."
       }
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1C1B1F"
-      },
-      "package": "com.varunmeda.deepfakeshield",
+      "package": "com.vmaroon95.deepfakeshield",
       "intentFilters": [
         {
           "action": "SEND",
@@ -44,9 +31,6 @@
           ]
         }
       ]
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-sharing",
