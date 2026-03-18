@@ -33,12 +33,15 @@
       ]
     },
     "plugins": [
-      "expo-sharing",
       [
         "expo-image-picker",
         {
           "photosPermission": "DeepfakeShield needs access to analyze media for deepfake detection."
         }
+      ],
+      [
+        "react-native-fast-tflite",
+        { "enableCoreMLDelegate": true }
       ]
     ]
   }

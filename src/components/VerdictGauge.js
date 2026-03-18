@@ -1,46 +1,37 @@
-import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, Animated, Easing } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-import Animated, {
-  useSharedValue,
-  useAnimatedProps,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
 import { getVerdictColor } from '../utils/colors';
-
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const SIZE = 200;
 const STROKE_WIDTH = 12;
 const RADIUS = (SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-/**
- * VerdictGauge — Circular progress indicator showing synthetic confidence score.
- *
- * @param {{ score: number }} props - Score 0-100 (0 = real, 100 = synthetic)
- */
 export default function VerdictGauge({ score = 0 }) {
-  const progress = useSharedValue(0);
+  const animValue = useRef(new Animated.Value(0)).current;
   const verdict = getVerdictColor(score);
 
   useEffect(() => {
-    progress.value = withTiming(score / 100, {
+    Animated.timing(animValue, {
+      toValue: score / 100,
       duration: 1500,
-      easing: Easing.bezierFn(0.4, 0, 0.2, 1),
-    });
+      easing: Easing.bezier(0.4, 0, 0.2, 1),
+      useNativeDriver: false,
+    }).start();
   }, [score]);
 
-  const animatedProps = useAnimatedProps(() => ({
-    strokeDashoffset: CIRCUMFERENCE * (1 - progress.value),
-  }));
+  const strokeDashoffset = animValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [CIRCUMFERENCE, 0],
+  });
+
+  const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
   return (
-    <View className="items-center my-6">
-      <View className="relative items-center justify-center">
+    <View style={{ alignItems: 'center', marginVertical: 24 }}>
+      <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
         <Svg width={SIZE} height={SIZE}>
-          {/* Background track */}
           <Circle
             cx={SIZE / 2}
             cy={SIZE / 2}
@@ -49,7 +40,6 @@ export default function VerdictGauge({ score = 0 }) {
             strokeWidth={STROKE_WIDTH}
             fill="none"
           />
-          {/* Animated progress arc */}
           <AnimatedCircle
             cx={SIZE / 2}
             cy={SIZE / 2}
@@ -58,27 +48,20 @@ export default function VerdictGauge({ score = 0 }) {
             strokeWidth={STROKE_WIDTH}
             fill="none"
             strokeDasharray={CIRCUMFERENCE}
-            animatedProps={animatedProps}
+            strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
             rotation="-90"
             origin={`${SIZE / 2}, ${SIZE / 2}`}
           />
         </Svg>
-
-        {/* Center content */}
-        <View className="absolute items-center">
+        <View style={{ position: 'absolute', alignItems: 'center' }}>
           <Text style={{ color: verdict.color, fontSize: 48, fontWeight: '700' }}>
             {score}
           </Text>
-          <Text className="text-onSurfaceVar text-sm mt-1">/ 100</Text>
+          <Text style={{ color: '#CAC4D0', fontSize: 14, marginTop: 4 }}>/ 100</Text>
         </View>
       </View>
-
-      {/* Verdict label */}
-      <View
-        className="mt-4 px-6 py-2 rounded-full"
-        style={{ backgroundColor: verdict.bg }}
-      >
+      <View style={{ marginTop: 16, paddingHorizontal: 24, paddingVertical: 8, borderRadius: 999, backgroundColor: verdict.bg }}>
         <Text style={{ color: verdict.color, fontSize: 16, fontWeight: '600' }}>
           {verdict.label}
         </Text>

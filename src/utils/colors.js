@@ -1,4 +1,3 @@
-// Material You Dark Theme tokens
 export const Colors = {
   surface: '#1C1B1F',
   surfaceVar: '#2B2930',
@@ -17,6 +16,8 @@ export const Colors = {
   // Verdict
   safe: '#A8DAB5',
   safeBg: '#1B3726',
+  lowConf: '#90CAF9',
+  lowConfBg: '#1A2733',
   warning: '#FFD599',
   warningBg: '#3D2E14',
   danger: '#FFB4AB',
@@ -25,6 +26,7 @@ export const Colors = {
 
 export const getVerdictColor = (score) => {
   if (score <= 30) return { color: Colors.safe, bg: Colors.safeBg, label: '✅ Likely Real' };
-  if (score <= 65) return { color: Colors.warning, bg: Colors.warningBg, label: '⚠️ Suspicious' };
+  if (score <= 50) return { color: Colors.lowConf, bg: Colors.lowConfBg, label: '🔵 Inconclusive' };
+  if (score <= 75) return { color: Colors.warning, bg: Colors.warningBg, label: '⚠️ Suspicious' };
   return { color: Colors.danger, bg: Colors.dangerBg, label: '🔴 Likely Synthetic' };
 };

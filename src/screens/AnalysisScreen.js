@@ -11,7 +11,7 @@ import ForensicBreakdown from '../components/ForensicBreakdown';
 import ForensicReport from '../components/ForensicReport';
 
 export default function AnalysisScreen({ route }) {
-  const { analyze, result, status, reset } = useDetection();
+  const { analyze, result, status, reset, modelReady } = useDetection();
   const [mediaUri, setMediaUri] = useState(route?.params?.uri || null);
 
   // If opened via share sheet with a URI, auto-analyze
@@ -48,7 +48,7 @@ export default function AnalysisScreen({ route }) {
             Analysis
           </Text>
           <Text style={{ color: Colors.onSurfaceVar, fontSize: 13, marginTop: 4 }}>
-            On-device forensic deepfake detection
+            {modelReady ? '🧠 Real model loaded' : '🎲 Simulation mode — no TFLite model'}
           </Text>
         </View>
 
